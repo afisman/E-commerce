@@ -54,12 +54,21 @@ class UI {
         });
         productsDOM.innerHTML = result;
     }
+    getBagButtons() {
+        const buttons = [...document.querySelectorAll('.bag-btn')];
+        buttons.forEach(button => {
+            let id = button.dataset.id
+            let inCart = cart.find(item => item.id === id);
+        })
+    }
 }
 
 //local storage
 
 class Storage {
-
+    static saveProducts(products) {
+        localStorage.setItem('products', JSON.stringify(products));
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //get all products
 
-    products.getProducts().then(products => ui.displayProducts(products))
+    products.getProducts().then(products => {
+        ui.displayProducts(products);
+        Storage.saveProducts(products);
+    }).then(() => {
+        ui.getBagButtons();
+    })
 })
 
 
